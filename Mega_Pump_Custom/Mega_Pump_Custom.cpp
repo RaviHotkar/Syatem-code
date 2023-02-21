@@ -1,0 +1,618 @@
+#include <Arduino.h>
+#include <EEPROM.h>
+
+#include "Mega_Eeprom_Custom.h"
+#include "Mega_ESP_Custom.h"
+#include "Mega_Global_Custom.h"
+#include "Mega_Pump_Custom.h"
+#include "Mega_Sensor_Custom.h"
+
+void Mega_Pump_Custom :: Relay_assign_setup()
+{
+    pinMode(RELAY1,  OUTPUT);                                                                       // Relay assigned as output for pump
+    pinMode(RELAY2,  OUTPUT);
+    pinMode(RELAY3,  OUTPUT);
+    pinMode(RELAY4,  OUTPUT);
+    pinMode(RELAY5,  OUTPUT);
+    pinMode(RELAY6,  OUTPUT);    
+    pinMode(RELAY7,  OUTPUT);
+    pinMode(RELAY8,  OUTPUT);   	
+	pinMode(RELAY9,  OUTPUT);                                                                       // Relay assigned as output for pump
+    pinMode(RELAY10, OUTPUT);
+    pinMode(RELAY11, OUTPUT);
+    pinMode(RELAY12, OUTPUT);
+    pinMode(RELAY13, OUTPUT);
+    pinMode(RELAY14, OUTPUT);    
+    pinMode(RELAY15, OUTPUT);
+    pinMode(RELAY16, OUTPUT);  
+    pinMode(RELAY17, OUTPUT);                                                                       // Relay assigned as output for pump
+    pinMode(RELAY18, OUTPUT);
+    pinMode(RELAY19, OUTPUT);
+    pinMode(RELAY20, OUTPUT); 	
+	
+	digitalWrite(RELAY1, LOW);                                                                     // Relay of pump output assigned as high 
+    digitalWrite(RELAY2, LOW);
+    digitalWrite(RELAY3, LOW);
+    digitalWrite(RELAY4, LOW);
+    digitalWrite(RELAY5, LOW);
+    digitalWrite(RELAY6, LOW);
+    digitalWrite(RELAY7, LOW);
+    digitalWrite(RELAY8, LOW);	
+	digitalWrite(RELAY9, LOW);                                                                     // Relay of pump output assigned as high 
+    digitalWrite(RELAY10,LOW);
+    digitalWrite(RELAY11,LOW);
+    digitalWrite(RELAY12,LOW);
+    digitalWrite(RELAY13,LOW);
+    digitalWrite(RELAY14,LOW);
+    digitalWrite(RELAY15,LOW);
+    digitalWrite(RELAY16,LOW);
+    digitalWrite(RELAY17,LOW);                                                                     // Relay of pump output assigned as high 
+    digitalWrite(RELAY18,LOW);
+    digitalWrite(RELAY19,LOW);
+    digitalWrite(RELAY20,LOW);	
+}
+
+void Mega_Pump_Custom :: control_Pumps()
+{
+	
+	
+//	Serial.print("Pump19_20_On      "); Serial.println(Pump19_20_On);
+	
+    if(input_command == 2)                                                                        // If input is "0" then relay1 is get off: 48 is ASCII of zero
+		{
+			digitalWrite(RELAY1, LOW);
+			Serial.println("Pump1 is OFF");
+			Serial3.print("*Pump1 is OFF#");
+		}
+    else if(input_command == 1)                                                                   // If input is "1" then relay1 is get on
+		{
+			pump1_flag = true;
+			digitalWrite(RELAY1, HIGH);
+			Serial.println("Pump1 is ON");
+			Serial3.print("*Pump1 is ON#");
+			pump1_timer.reset();
+			pump1_timer.start();
+		 
+		}
+    else if(input_command == 4)                                                                   // If input is "2" then relay2 is get off
+		{
+			digitalWrite(RELAY2, LOW);
+			Serial.println("Pump2 is OFF");
+			Serial3.print("*Pump2 is OFF#");
+		}
+    else if(input_command == 3)                                                                   // If input is "3" then relay2 is get on
+		{
+			pump2_flag = true;
+			digitalWrite(RELAY2, HIGH);
+			Serial.println("Pump2 is ON");
+			Serial3.print("*Pump2 is ON#");
+			pump2_timer.reset();
+			pump2_timer.start();
+		}
+    else if(input_command == 6)                                                                   // If input is "4" then relay3 is get off
+		{
+			digitalWrite(RELAY3, LOW);
+			Serial.println("Pump3 is OFF");
+			Serial3.print("*Pump3 is OFF#");
+		}
+    else if(input_command == 5)                                                                   // If input is "5" then relay3 is get on
+		{
+			pump3_flag = true;
+			digitalWrite(RELAY3, HIGH);
+			Serial.println("Pump3 is ON");
+			Serial3.print("*Pump3 is ON#");
+			pump3_timer.reset();
+			pump3_timer.start();
+		}
+    else if(input_command == 8)                                                                   // If input is "6" then relay4 is get off
+		{
+			digitalWrite(RELAY4, LOW);
+			Serial.println("Pump4 is OFF");
+			Serial3.print("*Pump4 is OFF#");
+		}
+    else if(input_command == 7)                                                                   // If input is "7" then relay4 is get on
+		{
+			pump4_flag = true;
+			digitalWrite(RELAY4, HIGH);
+			Serial.println("Pump4 is ON");
+			Serial3.print("*Pump4 is ON#");
+			pump4_timer.reset();
+			pump4_timer.start();
+		}
+    else if(input_command == 10)                                                                   // If input is "8" then relay5 is get off
+		{
+			digitalWrite(RELAY5, LOW);
+			Serial.println("Pump5 is OFF");
+			Serial3.print("*Pump5 is OFF#");
+		}
+    else if(input_command == 9)                                                                   // If input is "9" then relay5 is get on
+		{
+			pump5_flag = true;
+			digitalWrite(RELAY5, HIGH);
+			Serial.println("Pump5 is ON");
+			Serial3.print("*Pump5 is ON#");
+			pump5_timer.reset();
+			pump5_timer.start();
+		}
+	else if(input_command == 12)                                                                   // If input is "A" then relay6 is get off
+		{
+			digitalWrite(RELAY6, LOW);
+			Serial.println("Pump6 is OFF");
+			Serial3.print("*Pump6 is OFF#");
+		}
+    else if(input_command == 11)                                                                   // If input is "B" then relay6 is get on
+		{
+			pump6_flag = true;
+			digitalWrite(RELAY6, HIGH);
+			Serial.println("Pump6 is ON");
+			Serial3.print("*Pump6 is ON#");
+			pump6_timer.reset();
+			pump6_timer.start();
+		}
+    else if(input_command == 14)                                                                   // If input is "C" then relay5 is get off
+		{
+			digitalWrite(RELAY7, LOW);
+			Serial.println("Pump7 is OFF");
+			Serial3.print("*Pump7 is OFF#");
+		}
+    else if(input_command == 13)                                                                   // If input is "D" then relay5 is get on
+		{
+			pump7_flag = true;
+			digitalWrite(RELAY7, HIGH);
+			Serial.println("Pump7 is ON");
+			Serial3.print("*Pump7 is ON#");
+			pump7_timer.reset();
+			pump7_timer.start();
+		}
+	else if(input_command == 16)                                                                   // If input is "E" then relay6 is get off
+		{
+			digitalWrite(RELAY8, LOW);
+			Serial.println("Pump8 is OFF");
+			Serial3.print("*Pump8 is OFF#");
+		}
+    else if(input_command == 15)                                                                   // If input is "F" then relay6 is get on
+		{
+			pump8_flag = true;
+			digitalWrite(RELAY8, HIGH);
+			Serial.println("Pump8 is ON");
+			Serial3.print("*Pump8 is ON#");
+			pump8_timer.reset();
+			pump8_timer.start();
+		}
+	else if(input_command == 18)                                                                   // If input is "G" then relay1 is get off: 48 is ASCII of zero
+		{
+			digitalWrite(RELAY9, LOW);
+			Serial.println("Pump9 is OFF");
+			Serial3.print("*Pump9 is OFF#");
+		}
+    else if(input_command == 17)                                                                   // If input is "H" then relay1 is get on
+		{
+			pump9_flag = true;
+			digitalWrite(RELAY9, HIGH);
+			Serial.println("Pump9 is ON");
+			Serial3.print("*Pump9 is ON#");
+			pump9_timer.reset();
+			pump9_timer.start();
+		 
+		}
+    else if(input_command == 20)                                                                   // If input is "I" then relay2 is get off
+		{
+			digitalWrite(RELAY10, LOW);
+			Serial.println("Pump10 is OFF");
+			Serial3.print("*Pump10 is OFF#");
+		}
+    else if(input_command == 19)                                                                   // If input is "J" then relay2 is get on
+		{
+			pump10_flag = true;
+			digitalWrite(RELAY10, HIGH);
+			Serial.println("Pump10 is ON");
+			Serial3.print("*Pump10 is ON#");
+			pump10_timer.reset();
+			pump10_timer.start();
+		}
+    else if((input_command == 22)||((exhast_status_temp == false)&&(exhast_status_humidity_high == false)&&(exhast_status_humidity_low == false)&&(Pump19_20_On == true)))                                                                    // If input is "K" then relay3 is get off
+		{
+			digitalWrite(RELAY11, LOW);
+			Serial.println("Pump11 is OFF");
+			Serial3.print("*Pump11 is OFF#");
+			Pump19_20_On = false;
+		}
+    else if((input_command == 21)||((exhast_status_temp == true)||(exhast_status_humidity_high == true)||(exhast_status_humidity_low == true))&&(Pump19_20_On == false ))                                                                    // If input is "L" then relay3 is get on
+		{
+			pump11_flag = true;
+			digitalWrite(RELAY11, HIGH);
+			Serial.println("Pump11 is ON");
+			Serial3.print("*Pump11 is ON#");
+			pump11_timer.reset();
+			pump11_timer.start();
+			Pump19_20_On = true;
+		}
+    else if(input_command == 24)                                                                   // If input is "M" then relay4 is get off
+		{
+			digitalWrite(RELAY12, LOW);
+			Serial.println("Pump12 is OFF");
+			Serial3.print("*Pump12 is OFF#");
+		}
+    else if(input_command == 23)                                                                   // If input is "N" then relay4 is get on
+		{
+			pump12_flag = true;
+			digitalWrite(RELAY12, HIGH);
+			Serial.println("Pump12 is ON");
+			Serial3.print("*Pump12 is ON#");
+			pump12_timer.reset();
+			pump12_timer.start();
+		}
+    else if(input_command == 26)                                                                   // If input is "O" then relay5 is get off
+		{
+			digitalWrite(RELAY13, LOW);
+			Serial.println("Pump13 is OFF");
+			Serial3.print("*Pump13 is OFF#");
+		}
+    else if(input_command == 25)                                                                   // If input is "P" then relay5 is get on
+		{
+			pump13_flag = true;
+			digitalWrite(RELAY13, HIGH);
+			Serial.println("Pump13 is ON");
+			Serial3.print("*Pump13 is ON#");
+			pump13_timer.reset();
+			pump13_timer.start();
+		}
+	else if(input_command == 28)                                                                   // If input is "Q" then relay6 is get off
+		{
+			digitalWrite(RELAY14, LOW);
+			Serial.println("Pump14 is OFF");
+			Serial3.print("*Pump14 is OFF#");
+		}
+    else if(input_command == 27)                                                                   // If input is "R" then relay6 is get on
+		{
+			pump14_flag = true;
+			digitalWrite(RELAY14, HIGH);
+			Serial.println("Pump14 is ON");
+			Serial3.print("*Pump14 is ON#");
+			pump14_timer.reset();
+			pump14_timer.start();
+		}
+    else if(input_command == 30)                                                                   // If input is "S" then relay5 is get off
+		{
+			digitalWrite(RELAY15, LOW);
+			Serial.println("Pump15 is OFF");
+			Serial3.print("*Pump15 is OFF#");
+		}
+    else if(input_command == 29)                                                                   // If input is "T" then relay5 is get on
+		{
+			pump15_flag = true;
+			digitalWrite(RELAY15, HIGH);
+			Serial.println("Pump15 is ON");
+			Serial3.print("*Pump15 is ON#");
+			pump15_timer.reset();
+			pump15_timer.start();
+		}
+	else if(input_command == 32)                                                                   // If input is "U" then relay6 is get off
+		{
+			digitalWrite(RELAY16, LOW);
+			Serial.println("Pump16 is OFF");
+			Serial3.print("*Pump16 is OFF#");
+		}
+    else if(input_command == 31)                                                                   // If input is "V" then relay6 is get on
+		{
+			pump16_flag = true;
+			digitalWrite(RELAY16, HIGH);
+			Serial.println("Pump16 is ON");
+			Serial3.print("*Pump16 is ON#");
+			pump16_timer.reset();
+			pump16_timer.start();
+		}
+	else if(input_command == 34)                                                                  // If input is "W" then relay1 is get off: 48 is ASCII of zero
+		{
+			digitalWrite(RELAY17, LOW);
+			Serial.println("Pump17 is OFF");
+			Serial3.print("*Pump17 is OFF#");
+		}
+    else if(input_command == 33)                                                                   // If input is "X" then relay1 is get on
+		{
+			pump17_flag = true;
+			digitalWrite(RELAY17, HIGH);
+			Serial.println("Pump17 is ON");
+			Serial3.print("*Pump17 is ON#");
+			pump17_timer.reset();
+			pump17_timer.start();
+		 
+		}
+    else if(input_command == 36)                                                                   // If input is "Y" then relay2 is get off
+		{
+			digitalWrite(RELAY18, LOW);
+			Serial.println("Pump18 is OFF");
+			Serial3.print("*Pump18 is OFF#");
+		}
+    else if(input_command == 35)                                                                   // If input is "Z" then relay2 is get on
+		{
+			pump18_flag = true;
+			digitalWrite(RELAY18, HIGH);
+			Serial.println("Pump18 is ON");
+			Serial3.print("*Pump18 is ON#");
+			pump18_timer.reset();
+			pump18_timer.start();
+		}
+    else if(input_command == 38)                             // If input is "a" then relay3 is get off
+		{
+			digitalWrite(RELAY19, LOW);  // Turn OFF Exhaust only when all conditins are OFF.
+			Serial.println(" Pump19 is OFF  ");
+			Serial3.print(" *Pump19 is OFF#");
+	    }
+	else if(input_command == 37) //Turn ON Exhaust when one of the conditions to turn ON manually or if enviornmental conditions are met.                                                                // If input is "b" then relay3 is get on
+		{
+			pump19_flag = true;
+			digitalWrite(RELAY19, HIGH);
+			Serial.println(" Pump19 is ON ");
+//			Serial.println("       ");
+			Serial3.print(" *Pump19 is ON# ");
+			pump19_timer.reset();
+			pump19_timer.start();
+		}
+	else if(input_command == 40)
+	    {		
+			digitalWrite(RELAY20, LOW);
+			Serial.println(" Pump20 is OFF  ");
+			Serial3.print(" *Pump20 is OFF# ");
+		} 
+    else if(input_command == 39)                                
+		{
+			pump20_flag = true;
+			digitalWrite(RELAY20, HIGH);
+			Serial.println("Pump20 is ON");
+			Serial3.print("*Pump20 is ON#");
+			pump20_timer.reset();
+			pump20_timer.start();
+			
+//			Pump19_20_On = true ;
+		}
+/*    else if((input_command == 99)||((exhast_status_temp == false)&&(exhast_status_humidity_high == false)&&(exhast_status_humidity_low == false)))                                                                   // If input is "c" then relay4 is get off
+		{
+			digitalWrite(RELAY20, LOW);
+			Serial.println("Pump20 is OFF");
+			Serial3.print("*Pump20 is OFF#");
+		}
+      else if((input_command == 100)||(exhast_status_temp == true)||(exhast_status_humidity_high == true)||(exhast_status_humidity_low == true))                                                                 // If input is "d" then relay4 is get on
+		{
+			pump20_flag = true;
+			digitalWrite(RELAY20, HIGH);
+			Serial.println("Pump20 is ON");
+			Serial3.print("*Pump20 is ON#");
+			pump20_timer.reset();
+			pump20_timer.start();
+		}
+*/
+	input_command = 0; 
+} 
+
+void Mega_Pump_Custom :: check_pump_timer()                                                  // If anyone flag get's true then execute the timer function
+{
+	if((pump1_flag == true) || (pump2_flag == true) || (pump3_flag == true) || (pump4_flag == true) || (pump5_flag == true) || (pump6_flag == true) || (pump7_flag == true) || (pump8_flag == true) || (pump9_flag == true) || (pump10_flag == true) || (pump11_flag == true) || (pump12_flag == true) || (pump13_flag == true) || (pump14_flag == true) || (pump15_flag == true) || (pump16_flag == true) || (pump17_flag == true) || (pump18_flag == true) || (pump19_flag == true) || (pump20_flag == true))
+	  {
+		pump_timer();
+	  }
+}
+
+void Mega_Pump_Custom :: pump_timer()                                                        // PUMPS are geting off individually for assigned time
+{
+	int pump_time_temp1=int(pump1_timer.value()/CONV_MS_SEC);                                      // Read the timer for the PUMP
+	if((pump_time_temp1 >= PUMP1_TIME) && (pump1_flag == true))                                	   // Whether PUMP was on for needed time? 
+		{
+			digitalWrite(RELAY1, LOW);                                                            // Turn off the PUMP
+			Serial.println("Pump1 is OFF");
+			Serial3.print("*Pump1 is OFF#");                                                       // MSG to esp8266 ---> AWS also
+			Serial.println(pump_time_temp1);
+			pump1_timer.stop();
+			pump1_timer.reset();
+			pump1_flag = false;                                                                    // stop the time and Clear the flag
+		}
+	int pump_time_temp2=int(pump2_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp2 >= PUMP2_TIME) && (pump2_flag == true))       
+		{
+			digitalWrite(RELAY2, LOW);
+			Serial.println("Pump2 is OFF");
+			Serial3.print("*Pump2 is OFF#");
+			Serial.println(pump_time_temp2);
+			pump2_timer.stop();
+			pump2_timer.reset();
+			pump2_flag = false;
+		}
+	int pump_time_temp3=int(pump3_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp3 >= PUMP3_TIME) && (pump3_flag == true))       
+		{
+			digitalWrite(RELAY3, LOW);
+			Serial.println("Pump3 is OFF");
+			Serial3.print("*Pump3 is OFF#");
+			Serial.println(pump_time_temp3);
+			pump3_timer.stop();
+			pump3_timer.reset();
+			pump3_flag = false;
+		}
+	int pump_time_temp4=int(pump4_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp4 >= PUMP4_TIME) && (pump4_flag == true))       
+		{
+			digitalWrite(RELAY4, LOW);
+			Serial.println("Pump4 is OFF");
+			Serial3.print("*Pump4 is OFF#");
+			Serial.println(pump_time_temp4);
+			pump4_timer.stop();
+			pump4_timer.reset();
+			pump4_flag = false;
+		}
+	int pump_time_temp5=int(pump5_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp5 >= PUMP5_TIME) && (pump5_flag == true))       
+		{
+			digitalWrite(RELAY5, LOW);
+			Serial.println("Pump5 is OFF");
+			Serial3.print("*Pump5 is OFF#");
+			Serial.println(pump_time_temp5);
+			pump5_timer.stop();
+			pump5_timer.reset();
+			pump5_flag = false;
+		}
+	int pump_time_temp6=int(pump6_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp6 >= PUMP6_TIME) && (pump6_flag == true))       
+		{
+			digitalWrite(RELAY6, LOW);
+			Serial.println("Pump6 is OFF");
+			Serial3.print("*Pump6 is OFF#");
+			Serial.println(pump_time_temp6);
+			pump6_timer.stop();
+			pump6_timer.reset();
+			pump6_flag = false;
+		}
+	int pump_time_temp7=int(pump7_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp7 >= PUMP7_TIME) && (pump7_flag == true))       
+		{
+			digitalWrite(RELAY7, LOW);
+			Serial.println("Pump7 is OFF");
+			Serial3.print("*Pump7 is OFF#");
+			Serial.println(pump_time_temp7);
+			pump7_timer.stop();
+			pump7_timer.reset();
+			pump7_flag = false;
+		}
+	int pump_time_temp8=int(pump8_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp8 >= PUMP8_TIME) && (pump8_flag == true))       
+		{
+			digitalWrite(RELAY8, LOW);
+			Serial.println("Pump8 is OFF");
+			Serial3.print("*Pump8 is OFF#");
+			Serial.println(pump_time_temp8);
+			pump8_timer.stop();
+			pump8_timer.reset();
+			pump8_flag = false;
+		}
+	int pump_time_temp9=int(pump9_timer.value()/CONV_MS_SEC);                                      // Read the timer for the PUMP
+	if((pump_time_temp9 >= PUMP9_TIME) && (pump9_flag == true))                                	   // Whether PUMP was on for needed time? 
+		{
+			digitalWrite(RELAY9, LOW);                                                            // Turn off the PUMP
+			Serial.println("Pump9 is OFF");
+			Serial3.print("*Pump9 is OFF#");                                                       // MSG to esp8266 ---> AWS also
+			Serial.println(pump_time_temp9);
+			pump9_timer.stop();
+			pump9_timer.reset();
+			pump9_flag = false;                                                                    // stop the time and Clear the flag
+		}
+	int pump_time_temp10=int(pump10_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp10 >= PUMP10_TIME) && (pump10_flag == true))       
+		{
+			digitalWrite(RELAY10, LOW);
+			Serial.println("Pump10 is OFF");
+			Serial3.print("*Pump10 is OFF#");
+			Serial.println(pump_time_temp10);
+			pump10_timer.stop();
+			pump10_timer.reset();
+			pump10_flag = false;
+		}
+/*	int pump_time_temp11=int(pump11_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp11 >= PUMP11_TIME) && (pump11_flag == true))       
+		{
+			digitalWrite(RELAY11, LOW);
+			Serial.println("Pump11 is OFF");
+			Serial3.print("*Pump11 is OFF#");
+			Serial.println(pump_time_temp11);
+			pump11_timer.stop();
+			pump11_timer.reset();
+			pump11_flag = false;
+		}*/
+	int pump_time_temp12=int(pump12_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp12 >= PUMP12_TIME) && (pump12_flag == true))       
+		{
+			digitalWrite(RELAY12, LOW);
+			Serial.println("Pump12 is OFF");
+			Serial3.print("*Pump12 is OFF#");
+			Serial.println(pump_time_temp12);
+			pump12_timer.stop();
+			pump12_timer.reset();
+			pump12_flag = false;
+		}
+	int pump_time_temp13=int(pump13_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp13 >= PUMP13_TIME) && (pump13_flag == true))       
+		{
+			digitalWrite(RELAY13, LOW);
+			Serial.println("Pump13 is OFF");
+			Serial3.print("*Pump13 is OFF#");
+			Serial.println(pump_time_temp13);
+			pump13_timer.stop();
+			pump13_timer.reset();
+			pump13_flag = false;
+		}
+	int pump_time_temp14=int(pump14_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp14 >= PUMP14_TIME) && (pump14_flag == true))       
+		{
+			digitalWrite(RELAY14, LOW);
+			Serial.println("Pump14 is OFF");
+			Serial3.print("*Pump14 is OFF#");
+			Serial.println(pump_time_temp14);
+			pump14_timer.stop();
+			pump14_timer.reset();
+			pump14_flag = false;
+		}
+	int pump_time_temp15=int(pump15_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp15 >= PUMP15_TIME) && (pump15_flag == true))       
+		{
+			digitalWrite(RELAY15, LOW);
+			Serial.println("Pump15 is OFF");
+			Serial3.print("*Pump15 is OFF#");
+			Serial.println(pump_time_temp15);
+			pump15_timer.stop();
+			pump15_timer.reset();
+			pump15_flag = false;
+		}
+	int pump_time_temp16=int(pump16_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp16 >= PUMP16_TIME) && (pump16_flag == true))       
+		{
+			digitalWrite(RELAY16, LOW);
+			Serial.println("Pump16 is OFF");
+			Serial3.print("*Pump16 is OFF#");
+			Serial.println(pump_time_temp16);
+			pump16_timer.stop();
+			pump16_timer.reset();
+			pump16_flag = false;
+		}
+	int pump_time_temp17=int(pump17_timer.value()/CONV_MS_SEC);                                      // Read the timer for the PUMP
+	if((pump_time_temp17 >= PUMP17_TIME) && (pump17_flag == true))                                	 // Whether PUMP was on for needed time? 
+		{
+			digitalWrite(RELAY17, LOW);                                                              // Turn off the PUMP
+			Serial.println("Pump17 is OFF");
+			Serial3.print("*Pump17 is OFF#");                                                       // MSG to esp8266 ---> AWS also
+			Serial.println(pump_time_temp17);
+			pump17_timer.stop();
+			pump17_timer.reset();
+			pump17_flag = false;                                                                    // stop the time and Clear the flag
+		}
+	int pump_time_temp18=int(pump18_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp18 >= PUMP18_TIME) && (pump18_flag == true))       
+		{
+			digitalWrite(RELAY18, LOW);
+			Serial.println("Pump18 is OFF");
+			Serial3.print("*Pump18 is OFF#");
+			Serial.println(pump_time_temp18);
+			pump18_timer.stop();
+			pump18_timer.reset();
+			pump18_flag = false;
+		}
+	int pump_time_temp19=int(pump19_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp19 >= PUMP19_TIME) && (pump19_flag == true))       
+		{
+			digitalWrite(RELAY19, LOW);
+			Serial.println("Pump19 is OFF");
+			Serial3.print("*Pump19 is OFF#");
+			Serial.println(pump_time_temp19);
+			pump19_timer.stop();
+			pump19_timer.reset();
+			pump19_flag = false;
+		}
+	int pump_time_temp20=int(pump20_timer.value()/CONV_MS_SEC);
+	if((pump_time_temp20 >= PUMP20_TIME) && (pump20_flag == true))       
+		{
+			digitalWrite(RELAY20, LOW);
+			Serial.println("Pump20 is OFF");
+			Serial3.print("*Pump20 is OFF#");
+			Serial.println(pump_time_temp20);
+			pump20_timer.stop();
+			pump20_timer.reset();
+			pump20_flag = false;
+		}
+}

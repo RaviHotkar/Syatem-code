@@ -1,0 +1,35 @@
+#ifndef ESP_BOT_Custom_h
+#define ESP_BOT_Custom_h
+
+class ESP_BOT_Custom
+{
+	public 	  :
+				
+				void Bot_steps_setup(); 
+				void Bot_steps_loop(); 
+				void BOT_FORWARD_LOOP();
+				void BOT_BACKWARD_LOOP();
+				void BOT_Mobile_Charge();
+				
+				void Read_All_Distance_Sensors();
+				char Forward_Distance_Check();
+				char Backward_Distance_Check();
+				void Slow_Start_Forward();
+				void Slow_Start_Backward();
+				void Slow_Stop_Forward();
+				void Slow_Stop_Backward();
+				void stopp();
+				void BOT_Spray();
+				void BOT_Spray_charge() ;
+				long measure_distance_Front() ;
+				long measure_distance_Back();
+				long microsecondsToCentimeters(long microseconds);
+				void Flag_clear_BOT();
+				void  Read_Time_From_Mobiel();
+				
+	private   :			
+				
+	protected : 
+};
+
+#endif

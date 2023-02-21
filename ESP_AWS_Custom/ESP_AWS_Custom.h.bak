@@ -1,0 +1,35 @@
+#ifndef ESP_AWS_Custom_h
+#define ESP_AWS_Custom_h
+
+class ESP_AWS_Custom
+{
+	public 	  :
+				
+                void setup_wifi();
+				void getNTP();
+				void getEpoch();
+				void getTimeData();
+				void reconnect();
+				void getDay_Of_Week();  
+				
+				void reconnect_WiFi_AWS();
+				void read_data_AWS();
+
+				void read_data_AWS_Pump(int Pump_temp);
+
+				void read_data_AWS_ssid_pwd();
+				void read_data_AWS_On_Off_System();
+				void read_data_AWS_enquiry();
+//				void read_data_AWS_OTA_ESP();
+				void loop_AWS_NTP();
+				void loop_AWS_pub();
+				void loop_AWS_publish(const char* topic, const char* payload);
+				time_t timeClient_AWS();
+				void certificates();
+				
+	private   :			
+				void callback(char* topic, byte* payload, unsigned int length);               // This fuction is called when aws incoming MSG from AWS
+	protected : 
+};
+
+#endif

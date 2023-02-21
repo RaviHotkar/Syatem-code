@@ -1,0 +1,329 @@
+#include <Arduino.h>
+#include <EEPROM.h>
+
+#include "Mega_Eeprom_Custom.h"
+#include "Mega_ESP_Custom.h"
+#include "Mega_Global_Custom.h"
+#include "Mega_Pump_Custom.h"
+#include "Mega_Sensor_Custom.h"
+
+void Mega_ESP_Custom :: read_data_esp32()
+{
+    while(Serial3.available())                                                                     // Is data available from esp8266
+      {
+        char Rdata;
+        Rdata=Serial3.read();
+        Serial.print(Rdata);
+        received_data = received_data + Rdata;                                                     // Read data and stored in buffer
+        if(received_data.indexOf("}")>= 0)                                                         // IS the Received data ending with }
+        {
+          msgReceived = true;                                                                      // Set up Flag to indicate complete reception of data
+        }
+      }
+    if (msgReceived == true)
+      {                                                                                            // input format {"message": 1}
+        msgReceived = false;
+        read_data_esp32_message();
+        read_data_esp32_Duration();
+        //read_data_AWS_On_Off_Sensor();
+        read_data_AWS_On_Off_System();
+		read_data_esp32_enquiry();
+		
+      }
+}
+
+void Mega_ESP_Custom :: read_data_esp32_message()                                                // Read Function for manually pump "ON and OFF" status
+{     
+	int aws_index = received_data.indexOf("\"message\":");                                         // Store index of "message" in aws_index
+	if(aws_index>0)
+		{
+			String tmp_str = received_data.substring(aws_index);                                   // Substring of received_data starting from the index of "message" to end of the string
+			char msg[tmp_str.length()+1];                                                          // Declare an array of characters of length equal to length of the tmp_str+1
+			received_data = "";
+			tmp_str.toCharArray(msg, tmp_str.length()+1);                                          // Copy the character's of string tmp_str to the supplied buffer "msg" of length is equal to (length of tmp_str+1)
+				
+			if ( strstr(msg,"\"message\":") != NULL )                                              // If the first occurrence of "message" in the string "msg" is not NULL then
+				{
+					char *token;                                                                   // Declare a character pointer variable token
+					token = strtok(msg, " ");                                                      // Get the content of string seperated by space 
+					token = strtok(NULL, " ");                                                     // Get the next remaining string into token 
+					String temp_input = token;                                                     // Assign the latest token to string 
+					//input_command = temp_input.charAt(0);                                          // Get the pump activation command
+				    input_command = temp_input.toInt();
+					Serial.print("\r\n input_command");Serial.println(input_command);
+				
+				}
+		}
+}
+
+void Mega_ESP_Custom :: read_data_esp32_Duration()                                               // Read Function for manually pump "Duration" change
+{     
+	int aws_index = received_data.indexOf("\"Duration\":");                                        // Store index of "Duration" in aws_index
+	if(aws_index>0)  
+	  {
+		String tmp_str = received_data.substring(aws_index);                                       // Substring of received_data starting from the index of "Duration" to end of the string
+		char msg[tmp_str.length()+1];                                                              // Declare an array of characters of length equal to length of the tmp_str+1
+		received_data = "";
+		tmp_str.toCharArray(msg, tmp_str.length()+1);                                              // Copy the character's of string tmp_str to the supplied buffer "msg" of length is equal to (length of tmp_str+1)
+
+		unsigned int temp_On_Time1 = 0,temp_On_Time2  = 0,temp_On_Time3  = 0,temp_On_Time4  = 0,temp_On_Time5  = 0,temp_On_Time6  = 0,temp_On_Time7  = 0,temp_On_Time8  = 0; 
+		unsigned int temp_On_Time9 = 0,temp_On_Time10 = 0,temp_On_Time11 = 0,temp_On_Time12 = 0,temp_On_Time13 = 0,temp_On_Time14 = 0,temp_On_Time15 = 0,temp_On_Time16 = 0; 
+        unsigned int temp_On_Time17 = 0,temp_On_Time18 = 0,temp_On_Time19 = 0,temp_On_Time20 = 0; 
+
+		if ( strstr(msg,"\"Duration\":") != NULL )                                                 // If the first occurrence of "Duration" in the string "msg" is not NULL then
+			{
+				char *token,*token1,*token2,*token3,*token4,*token5,*token6,*token7,*token8;       // Declare a character pointer variable token
+				char *token9, *token10,*token11,*token12,*token13,*token14,*token15,*token16;
+				char *token17,*token18,*token19,*token20;
+				
+				token   = strtok(msg, " ");                                                        // Get the content of string seperated by space 
+				token1  = strtok(NULL, " ");                                                       // Get the next remaining string into token 
+				token2  = strtok(NULL, " ");  
+				token3  = strtok(NULL, " ");  
+				token4  = strtok(NULL, " ");  
+				token5  = strtok(NULL, " ");  
+				token6  = strtok(NULL, " ");  
+				token7  = strtok(NULL, " ");  
+				token8  = strtok(NULL, " ");  
+				token9  = strtok(NULL, " ");                                                       // Get the next remaining string into token 
+			    token10 = strtok(NULL, " ");                                                       // Get the next remaining string into token 
+			    token11 = strtok(NULL, " ");                                                       // Get the next remaining string into token 
+			    token12 = strtok(NULL, " ");                                                       // Get the next remaining string into token 
+			    token13 = strtok(NULL, " ");                                                       // Get the next remaining string into token 
+			    token14 = strtok(NULL, " ");                                                       // Get the next remaining string into token 
+			    token15 = strtok(NULL, " ");                                                       // Get the next remaining string into token 
+			    token16 = strtok(NULL, " ");                                                       // Get the next remaining string into token 
+				
+				token17 = strtok(NULL, " ");                                                       // Get the next remaining string into token 
+			    token18 = strtok(NULL, " ");                                                       // Get the next remaining string into token 
+			    token19 = strtok(NULL, " ");                                                       // Get the next remaining string into token 
+			    token20 = strtok(NULL, " ");                                                       // Get the next remaining string into token 
+				
+				String temp_input = token1;                                                        // Assign the latest token to string 
+                temp_On_Time1 = temp_input.toInt();
+  
+                temp_input = token2; 
+                temp_On_Time2 = temp_input.toInt();
+                    
+                temp_input = token3; 
+                temp_On_Time3 = temp_input.toInt();
+				  
+				temp_input = token4; 
+                temp_On_Time4 = temp_input.toInt();
+				  
+				temp_input = token5; 
+                temp_On_Time5 = temp_input.toInt();
+				  
+				temp_input = token6; 
+                temp_On_Time6 = temp_input.toInt();
+				  
+				temp_input = token7; 
+                temp_On_Time7 = temp_input.toInt();
+				  
+				temp_input = token8; 
+                temp_On_Time8 = temp_input.toInt();
+				  
+				temp_input = token9;                                                               // Assign the latest token to string 
+                temp_On_Time9 = temp_input.toInt();
+  
+                temp_input = token10; 
+                temp_On_Time10 = temp_input.toInt();
+                    
+                temp_input = token11; 
+                temp_On_Time11 = temp_input.toInt();
+				  
+				temp_input = token12; 
+                temp_On_Time12 = temp_input.toInt();
+				  
+				temp_input = token13; 
+                temp_On_Time13 = temp_input.toInt();
+				  
+				temp_input = token14; 
+                temp_On_Time14 = temp_input.toInt();
+				  
+				temp_input = token15; 
+                temp_On_Time15 = temp_input.toInt();
+				  
+				temp_input = token16; 
+                temp_On_Time16 = temp_input.toInt();
+				
+				temp_input = token17; 
+                temp_On_Time17 = temp_input.toInt();
+				  
+				temp_input = token18; 
+                temp_On_Time18 = temp_input.toInt();
+				  
+				temp_input = token19; 
+                temp_On_Time19 = temp_input.toInt();
+				  
+				temp_input = token20; 
+                temp_On_Time20 = temp_input.toInt();
+				
+				PUMP1_TIME = temp_On_Time1;
+				PUMP2_TIME = temp_On_Time2;
+				PUMP3_TIME = temp_On_Time3;
+				PUMP4_TIME = temp_On_Time4;
+				
+				PUMP5_TIME = temp_On_Time5;
+				PUMP6_TIME = temp_On_Time6;
+				PUMP7_TIME = temp_On_Time7;
+				PUMP8_TIME = temp_On_Time8;
+				
+				PUMP9_TIME  = temp_On_Time9;
+				PUMP10_TIME = temp_On_Time10;
+				PUMP11_TIME = temp_On_Time11;
+				PUMP12_TIME = temp_On_Time12;
+				
+				PUMP13_TIME = temp_On_Time13;
+				PUMP14_TIME = temp_On_Time14;
+				PUMP15_TIME = temp_On_Time15;
+				PUMP16_TIME = temp_On_Time16;
+				
+				PUMP17_TIME = temp_On_Time17;
+				PUMP18_TIME = temp_On_Time18;
+				PUMP19_TIME = temp_On_Time19;
+				PUMP20_TIME = temp_On_Time20;
+				
+				EEPROM.write(PUMP1_DURATION_ADDRESS, PUMP1_TIME);
+				EEPROM.write(PUMP2_DURATION_ADDRESS, PUMP2_TIME);
+				EEPROM.write(PUMP3_DURATION_ADDRESS, PUMP3_TIME);
+				EEPROM.write(PUMP4_DURATION_ADDRESS, PUMP4_TIME);
+				
+				EEPROM.write(PUMP5_DURATION_ADDRESS, PUMP5_TIME);
+				EEPROM.write(PUMP6_DURATION_ADDRESS, PUMP6_TIME);
+				EEPROM.write(PUMP7_DURATION_ADDRESS, PUMP7_TIME);
+				EEPROM.write(PUMP8_DURATION_ADDRESS, PUMP8_TIME);
+				
+				EEPROM.write(PUMP9_DURATION_ADDRESS,  PUMP9_TIME) ;
+				EEPROM.write(PUMP10_DURATION_ADDRESS, PUMP10_TIME);
+				EEPROM.write(PUMP11_DURATION_ADDRESS, PUMP11_TIME);
+				EEPROM.write(PUMP12_DURATION_ADDRESS, PUMP12_TIME);
+				
+				EEPROM.write(PUMP13_DURATION_ADDRESS, PUMP13_TIME);
+				EEPROM.write(PUMP14_DURATION_ADDRESS, PUMP14_TIME);
+				EEPROM.write(PUMP15_DURATION_ADDRESS, PUMP15_TIME);
+				EEPROM.write(PUMP16_DURATION_ADDRESS, PUMP16_TIME);
+				
+				EEPROM.write(PUMP17_DURATION_ADDRESS, PUMP17_TIME);
+				EEPROM.write(PUMP18_DURATION_ADDRESS, PUMP18_TIME);
+				EEPROM.write(PUMP19_DURATION_ADDRESS, PUMP19_TIME);
+				EEPROM.write(PUMP20_DURATION_ADDRESS, PUMP20_TIME);
+				
+				Serial3.println("*Duration is CHANGED#");
+				Serial.println("*Duration is CHANGED#");
+					
+			}
+	  }
+}
+/*
+void Mega_ESP_Custom :: read_data_AWS_On_Off_Sensor()                                              // Read Function for manually Sensor "ON and OFF" status
+{
+  int aws_index = received_data.indexOf("\"On_Off_Sensor\":");                                     // Store index of "On_Off_Sensor" in aws_index
+  if(aws_index>0)
+      {
+        String tmp_str = received_data.substring(aws_index);                                       // Substring of received_data starting from the index of "On_Off_Sensor" to end of the string
+        char msg[tmp_str.length()+1];                                                              // Declare an array of characters of length equal to length of the tmp_str+1
+        received_data = "";
+        tmp_str.toCharArray(msg, tmp_str.length()+1);                                              // Copy the character's of string tmp_str to the supplied buffer "msg" of length is equal to (length of tmp_str+1)
+
+        unsigned int temp_On_Off_status_sensor = 0;  
+        String temp_sensor_name = " " ;
+        if ( strstr(msg,"\"On_Off_Sensor\":") != NULL )                                            // If the first occurrence of "On_Off_Sensor" in the string "msg" is not NULL then
+            {
+                char *token,*token1,*token2;                                                       // Declare a character pointer variable token
+                token = strtok(msg, " ");                                                          // Get the content of string seperated by space 
+                token1 = strtok(NULL, " ");                                                        // Get the next remaining string into token 
+                token2 = strtok(NULL, " ");                                                        // Get the next remaining string into token 
+
+                String temp_input = token1;                                                        // Assign the latest token to string 
+                temp_sensor_name = temp_input;
+
+                temp_input = token2; 
+                temp_On_Off_status_sensor = temp_input.toInt();
+                
+                if (temp_sensor_name == "SHT")                                                     // SHT sensor 'ON' and 'OFF' function will do
+                    {
+                        SHT_On_Off_sequence = temp_On_Off_status_sensor;
+                        if(SHT_On_Off_sequence == true)
+                          {
+                            Serial3.println("*Sensor_On_Off_SHT_ON#");
+                            Serial.println("*Sensor_On_Off_SHT_ON#");
+                          }
+                        else
+                          {
+                            Serial3.println("*Sensor_On_Off_SHT_OFF#");
+                            Serial.println("*Sensor_On_Off_SHT_OFF#");
+                          }
+                        EEPROM.write(SHT_ON_OFF_ADDRESS, SHT_On_Off_sequence);
+                    }
+/*                if (temp_sensor_name == "MOIST")                                                   // soil moisture sensor 'ON' and 'OFF' function will do
+                    {
+                        Moist_On_Off_sequence = temp_On_Off_status_sensor;
+                        if(Moist_On_Off_sequence == true)
+                          {
+                            Serial3.println("*Sensor_On_Off_MOIST_ON#");
+                            Serial.println("*Sensor_On_Off_MOIST_ON#");
+                          }
+                        else
+                          {
+                            Serial3.println("*Sensor_On_Off_MOIST_OFF#");
+                            Serial.println("*Sensor_On_Off_MOIST_OFF#");
+                          }
+                        EEPROM.write(MOIST_ON_OFF_ADDRESS, Moist_On_Off_sequence);
+                    }
+
+            }
+      }
+}
+*/
+void Mega_ESP_Custom :: read_data_AWS_On_Off_System()                                              // Read Function for manually System "ON and OFF" status
+{
+  int aws_index = received_data.indexOf("\"On_Off_System\":");                                     // Store index of "On_Off_System" in aws_index
+  if(aws_index>0)
+      {
+        String tmp_str = received_data.substring(aws_index);                                       // Substring of received_data starting from the index of "On_Off_System" to end of the string
+        char msg[tmp_str.length()+1];                                                              // Declare an array of characters of length equal to length of the tmp_str+1
+        received_data = "";
+        tmp_str.toCharArray(msg, tmp_str.length()+1);                                              // Copy the character's of string tmp_str to the supplied buffer "msg" of length is equal to (length of tmp_str+1)
+
+        unsigned int temp_On_Off_status_system = 0;  
+        if ( strstr(msg,"\"On_Off_System\":") != NULL )                                            // If the first occurrence of "On_Off_System" in the string "msg" is not NULL then
+            {
+                char *token,*token1;                                                               // Declare a character pointer variable token
+                token = strtok(msg, " ");                                                          // Get the content of string seperated by space 
+                token1 = strtok(NULL, " ");                                                        // Get the next remaining string into token 
+ 
+                String temp_input = token1;                                                        // Assign the latest token to string 
+                temp_On_Off_status_system = temp_input.toInt();
+
+                System_On_Off_sequence = temp_On_Off_status_system;
+                if(System_On_Off_sequence == true)
+                  {
+                    Serial3.println("*System_On_Off_Mega_ON#");
+                    Serial.println("*System_On_Off_Mega_ON#");
+                  }
+                else
+                  {
+                    Serial3.println("*System_On_Off_Mega_OFF#");
+                    Serial.println("*System_On_Off_Mega_OFF#");
+                  }
+                EEPROM.write(SYSTEM_ON_OFF_ADDRESS, System_On_Off_sequence);
+            }
+      }
+}
+
+void Mega_ESP_Custom :: read_data_esp32_enquiry()                                                // Information of the whole system
+{     
+	int aws_index = received_data.indexOf("\"enquiry\":");                                         // Store index of "enquiry" in aws_index
+	if(aws_index>0)
+     {
+        String Space_str = "  ";
+        received_data = "";
+        enquiry = "SW_VER:" + Space_str + SW_VER + Space_str + "PUMP:" + Space_str + PUMP1_TIME + Space_str +  + PUMP2_TIME + Space_str +  + PUMP3_TIME + Space_str +  + PUMP4_TIME + Space_str +  + PUMP5_TIME + Space_str +  + PUMP6_TIME + Space_str +  + PUMP7_TIME + Space_str +  + PUMP8_TIME + Space_str;                                  
+        enquiry1 = PUMP9_TIME + Space_str +  + PUMP10_TIME + Space_str +  + PUMP11_TIME + Space_str +  + PUMP12_TIME + Space_str +  + PUMP13_TIME + Space_str +  + PUMP14_TIME + Space_str +  + PUMP15_TIME + Space_str +  + PUMP16_TIME  + Space_str;                                  
+        enquiry2 = PUMP17_TIME + Space_str +  + PUMP18_TIME + Space_str +  + PUMP19_TIME + Space_str +  + PUMP20_TIME  + Space_str +  + "  SENSOR:" + Space_str + SHT_On_Off_sequence + Space_str + + Moist_On_Off_sequence + Space_str + "SYSTEM:  " + System_On_Off_sequence + Space_str;
+//		enquiry2 = "  SENSOR:" + Space_str + SHT_On_Off_sequence + Space_str + + Moist_On_Off_sequence + Space_str + "SYSTEM:  " + System_On_Off_sequence + Space_str;
+        Serial3.print("*Enquiry: ");Serial3.print(enquiry);Serial3.print(enquiry1);Serial3.print(enquiry2);Serial3.print("#");
+        Serial.print("Enquiry: ");Serial.print(enquiry);Serial.println(enquiry1);Serial.println(enquiry2);
+      }
+}
